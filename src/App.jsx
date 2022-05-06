@@ -13,12 +13,12 @@ export default function App() {
         <Route path="/login">
           <Auth />
         </Route>
-        <PrivateRoute path="/welcome">
+        <Route path="/welcome">
           <Welcome />
-        </PrivateRoute>
-        <PrivateRoute path="/">
+        </Route>
+        <Route path="/">
           <Home />
-        </PrivateRoute>
+        </Route>
       </Switch>
     </>
   );

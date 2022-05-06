@@ -1,25 +1,15 @@
 import { createContext, useContext, useState } from 'react';
+import { getUser } from '../services/user';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ email: null });
-
-  const login = (email, password) => {
-    console.log('login', email, password);
-    if (email === 'a@a.com' && password === '123456') {
-      setUser({ email });
-    } else {
-      throw new Error('Invalid Credentials');
-    }
-  };
-
-  const logout = () => {
-    setUser({ email: null });
-  };
+  const [user, setUser] = useState(getUser() || { email: null });
+  //const [currentUser, setCurrentUser] = useState(getUser());
+  //const [currentUserId, setCurrentUserId] = useState(getUser());
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );
