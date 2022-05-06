@@ -3,14 +3,15 @@ import { useUser } from '../context/UserContext';
 
 export default function PrivateRoute({ children, ...rest }) {
   console.log('children', children);
-  const context = useUser();
-  console.log('context', context);
+  const { user } = useUser();
+  console.log('context', user);
 
   const location = useLocation();
+  console.log('location', location);
 
   return (
     <Route {...rest}>
-      {context.user.email ? (
+      {user.email ? (
         children
       ) : (
         <Redirect to={{ pathname: '/login', state: { from: location } }} />

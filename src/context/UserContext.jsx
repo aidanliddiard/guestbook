@@ -4,10 +4,17 @@ import { getUser } from '../services/user';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(getUser() || { email: null });
+  const currentUser = getUser();
+  const [user, setUser] = useState(currentUser || { email: null });
+
+  console.log(currentUser);
+
+  const logout = () => {
+    setUser({ email: null });
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </UserContext.Provider>
   );

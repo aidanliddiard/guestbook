@@ -9,7 +9,7 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const location = useLocation();
-  const context = useUser();
+  const { setUser } = useUser();
   const [error, setError] = useState('');
   const history = useHistory();
   const [newUser, setNewUser] = useState(true);
@@ -17,24 +17,27 @@ export default function Auth() {
   const handleSignUp = async (e) => {
     try {
       e.preventDefault();
-      await signUpUser({ email, password });
-
-      //const url = location.state.from ? location.state.from.pathname : '/';
+      const user = await signUpUser({ email, password });
+      //const url = location.state?.from ? location.state.from.pathname : '/';
+      setUser(user);
       history.push('/welcome');
     } catch (error) {
       setError(error.message);
     }
   };
+
   const handleSignIn = async (e) => {
     try {
       e.preventDefault();
-      await signInUser({ email, password });
-      //const url = location.state.from ? location.state.from.pathname : '/';
+      const user = await signInUser({ email, password });
+      //const url = location.state?.from ? location.state.from.pathname : '/';
+      setUser(user);
       history.push('/welcome');
     } catch (error) {
       setError(error.message);
     }
   };
+
   const handleClick = () => {
     setNewUser(!newUser);
   };
@@ -89,6 +92,7 @@ export default function Auth() {
             ></input>
             <button type="submit">Sign In</button>
           </form>
+          <p>{error}</p>
         </>
       )}
     </>
