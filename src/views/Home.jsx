@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import ContentCard from '../components/ContentCard';
 import { useUser } from '../context/UserContext';
-import { createEntry } from '../services/entries';
+import { createEntry, getEntries } from '../services/entries';
 import { signOutUser } from '../services/user';
 
 export default function Home() {
   const [content, setContent] = useState('');
   const { user } = useUser();
   const userId = user.id;
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [update, setUpdate] = useState({});
+
+  useEffect(() => {
+    getEntries()
+      .then(setMessages)
+      .catch(console.error)
+      .finally(setLoading(false));
+  }, [update]);
 
   const handleAdd = async () => {
-    const data = await createEntry({ userId, content });
-    console.log(data);
+    const newMessage = await createEntry({ userId, content });
+    setUpdate(newMessage);
+    setContent('');
   };
+
   return (
     <>
+      <labe>Enter your message here:</labe>
       <input
         id="content"
         name="content"
@@ -21,7 +35,31 @@ export default function Home() {
         value={content}
         onChange={(e) => setContent(e.target.value)}
       ></input>
-      <button onClick={handleAdd}>Add</button>
+      <button
+        style={{ backgroundColor: 'green', color: 'white' }}
+        onClick={handleAdd}
+      >
+        Add
+      </button>
+      {loading ? (
+        <p>Loading Messages ..</p>
+      ) : (
+        <>
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              style={{
+                width: '25%',
+                border: '1px solid black',
+                padding: '10px',
+                margin: '10px',
+              }}
+            >
+              <ContentCard updateDeleted={setUpdate} message={message} />
+            </div>
+          ))}
+        </>
+      )}
       <button onClick={signOutUser}>Log Out</button>
     </>
   );
