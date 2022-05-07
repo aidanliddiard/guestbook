@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import ContentCard from '../components/ContentCard';
 import { useUser } from '../context/UserContext';
 import { createEntry, getEntries } from '../services/entries';
-import { signOutUser } from '../services/user';
 
 export default function Home() {
   const [content, setContent] = useState('');
@@ -12,7 +11,6 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState({});
-  const history = useHistory();
 
   useEffect(() => {
     getEntries()
@@ -28,14 +26,11 @@ export default function Home() {
     setContent('');
   };
 
-  // const handleLogOut = async () => {
-  //   await signOutUser();
-  //   history.push('/login');
-  // };
-
   return (
     <>
-      <label>Enter your message here:</label>
+      <h3>Hello {user.email}!</h3>
+      <label>Enter your message here: </label>
+      <br></br>
       <input
         id="content"
         name="content"

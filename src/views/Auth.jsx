@@ -1,6 +1,4 @@
-import { context } from 'msw';
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { signUpUser, signInUser } from '../services/user';
@@ -8,7 +6,6 @@ import { signUpUser, signInUser } from '../services/user';
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const location = useLocation();
   const { setUser } = useUser();
   const [error, setError] = useState('');
   const history = useHistory();
@@ -18,9 +15,8 @@ export default function Auth() {
     try {
       e.preventDefault();
       const user = await signUpUser({ email, password });
-      //const url = location.state?.from ? location.state.from.pathname : '/';
       setUser(user);
-      history.push('/welcome');
+      history.replace('/welcome');
     } catch (error) {
       setError(error.message);
     }
@@ -30,9 +26,8 @@ export default function Auth() {
     try {
       e.preventDefault();
       const user = await signInUser({ email, password });
-      //const url = location.state?.from ? location.state.from.pathname : '/';
       setUser(user);
-      history.push('/welcome');
+      history.replace('/welcome');
     } catch (error) {
       setError(error.message);
     }
